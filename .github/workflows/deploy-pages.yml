@@ -24,18 +24,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Setup Node.js 20
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
 
       - name: Verify project files
         run: |
-          echo "Repo root:"
           ls -lah
-
-          echo "Checking required files..."
           test -f package.json
           test -f next.config.mjs
           test -f tailwind.config.ts
@@ -46,10 +42,10 @@ jobs:
       - name: Build Next.js static export
         run: npm run build
 
-      - name: Verify out folder
+      - name: Verify output
         run: |
-          echo "Generated out directory:"
           ls -lah out
+          test -f out/index.html
 
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v5
