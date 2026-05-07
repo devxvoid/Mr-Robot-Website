@@ -1,17 +1,20 @@
-# TeleClaw Next Workspace
+# TeleClaw Production Workspace
 
-Professional Next.js + TailwindCSS + Framer Motion frontend for TeleClaw / Mr. Robot AI Agents.
+Production-grade Next.js + TailwindCSS + Framer Motion frontend for TeleClaw / Mr. Robot AI Agents.
 
-## Features
+## Includes
 
-- Responsive cyberpunk workspace UI
-- Sidebar navigation
-- AI chat workspace
+- Workspace shell
+- Sidebar and mobile navigation
+- AI chat console
 - Multi-agent dashboard
 - Live terminal simulation
 - Workflow builder preview
-- Telegram Mini App friendly viewport
-- Static export compatible for GitHub Pages
+- Project manager
+- Android APK builder UI
+- Provider-ready settings panel
+- Telegram Mini App compatible viewport
+- Static GitHub Pages export workflow
 
 ## Run locally
 
@@ -26,12 +29,24 @@ npm run dev
 npm run build
 ```
 
-Because `next.config.mjs` uses `output: "export"`, the static site is generated in:
+Static output is generated in:
 
 ```text
 out/
 ```
 
-## Deploy to GitHub Pages
+## Deploy
 
-Upload the exported `out/` contents to GitHub Pages, or use a GitHub Actions workflow to deploy automatically.
+The included workflow deploys automatically to GitHub Pages after pushing to `main`.
+
+Go to:
+
+```text
+Settings → Pages → Source → GitHub Actions
+```
+
+Then run or push to trigger:
+
+```text
+.github/workflows/deploy-pages.yml
+```

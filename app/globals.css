@@ -1,0 +1,82 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  --tg-safe-area-inset-top: env(safe-area-inset-top);
+  --tg-safe-area-inset-bottom: env(safe-area-inset-bottom);
+}
+
+* { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  background: #03060c;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #03060c;
+  color: #f8fafc;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -4;
+  background:
+    radial-gradient(circle at 18% 8%, rgba(255, 38, 56, 0.28), transparent 34%),
+    radial-gradient(circle at 82% 8%, rgba(25, 230, 255, 0.20), transparent 32%),
+    radial-gradient(circle at 70% 72%, rgba(139, 92, 246, 0.13), transparent 30%),
+    linear-gradient(180deg, #081423, #03060c 70%);
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -3;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
+  background-size: 42px 42px;
+  opacity: .24;
+}
+
+.glass {
+  background: linear-gradient(135deg, rgba(255,255,255,.105), rgba(255,255,255,.035));
+  border: 1px solid rgba(255,255,255,.12);
+  backdrop-filter: blur(22px);
+  box-shadow: 0 20px 80px rgba(0,0,0,.34);
+}
+
+.glass-strong {
+  background: linear-gradient(135deg, rgba(16, 23, 42, .90), rgba(9, 14, 25, .72));
+  border: 1px solid rgba(255,255,255,.12);
+  backdrop-filter: blur(26px);
+}
+
+.neon-text {
+  text-shadow: 0 0 18px rgba(25,230,255,.75);
+}
+
+.cyber-button {
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ff2638, #19e6ff);
+  box-shadow: 0 0 28px rgba(25,230,255,.24);
+  font-weight: 900;
+}
+
+.safe-bottom {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: rgba(25,230,255,.28); border-radius: 999px; }
+::-webkit-scrollbar-track { background: transparent; }
