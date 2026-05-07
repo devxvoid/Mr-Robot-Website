@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      ZIP_FILE: Aria2DownloaderAndroid_daemon_fixed_idm_project.zip
+      ZIP_FILE: teleclaw-production-workspace.zip
 
     steps:
       - name: Checkout repo
