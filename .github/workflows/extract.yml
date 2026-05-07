@@ -14,44 +14,63 @@ jobs:
       ZIP_FILE: teleclaw-production-workspace.zip
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repo with PAT
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          token: ${{ secrets.PAT_TOKEN }}
 
       - name: Install unzip and rsync
+        shell: bash
         run: |
           sudo apt-get update
           sudo apt-get install -y unzip rsync
 
       - name: Verify ZIP exists
+        shell: bash
         run: |
+          set -euo pipefail
+          echo "Checking repo root..."
           ls -lah
           test -f "$ZIP_FILE"
 
       - name: Extract ZIP to temp folder
+        shell: bash
         run: |
+          set -euo pipefail
           rm -rf extracted
           mkdir -p extracted
           unzip -o "$ZIP_FILE" -d extracted
+
+          echo "Extracted structure:"
           find extracted -maxdepth 4 | sed 's#^#- #'
 
       - name: Copy extracted files to repo root
+        shell: bash
         run: |
+          set -euo pipefail
           rsync -av extracted/ ./
 
       - name: Delete ZIP and temp folder
+        shell: bash
         run: |
+          set -euo pipefail
           rm -rf extracted
           rm -f "$ZIP_FILE"
 
       - name: Show final repo files
+        shell: bash
         run: |
+          echo "Final repo root:"
           ls -lah
-          find . -maxdepth 3 | sed 's#^#- #'
+          echo "Workflow files:"
+          find .github/workflows -maxdepth 1 -type f -print || true
 
-      - name: Commit extracted files
+      - name: Commit and push extracted workspace
+        shell: bash
         run: |
+          set -euo pipefail
+
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
@@ -63,4 +82,5 @@ jobs:
           fi
 
           git commit -m "Extract TeleClaw production workspace"
-          git push
+
+          git push https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
