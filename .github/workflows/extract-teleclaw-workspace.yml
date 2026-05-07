@@ -1,0 +1,54 @@
+name: Extract TeleClaw Workspace ZIP
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT_TOKEN || github.token }}
+
+      - name: Extract workspace ZIP to repo root
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          ZIP_FILE="teleclaw-production-workspace.zip"
+
+          if [ ! -f "$ZIP_FILE" ]; then
+            echo "❌ $ZIP_FILE not found in repo root."
+            exit 1
+          fi
+
+          echo "📦 Extracting $ZIP_FILE..."
+          unzip -o "$ZIP_FILE" -d .
+
+          echo "🧹 Removing ZIP file..."
+          rm -f "$ZIP_FILE"
+
+          echo "✅ Extraction completed."
+
+      - name: Show extracted files
+        run: |
+          echo "Repo root after extraction:"
+          ls -la
+
+      - name: Commit extracted workspace
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add .
+          git commit -m "Extract TeleClaw production workspace" || echo "No changes to commit"
+          git push
