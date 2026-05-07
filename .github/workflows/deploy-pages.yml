@@ -3,7 +3,8 @@ name: Deploy TeleClaw Workspace to GitHub Pages
 on:
   workflow_dispatch:
   push:
-    branches: [main]
+    branches:
+      - main
 
 permissions:
   contents: read
@@ -11,43 +12,63 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
+  group: github-pages
   cancel-in-progress: false
 
 jobs:
   build:
+    name: Build Next.js Workspace
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js 20
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
 
+      - name: Verify project files
+        run: |
+          echo "Repo root:"
+          ls -lah
+
+          echo "Checking required files..."
+          test -f package.json
+          test -f next.config.mjs
+          test -f tailwind.config.ts
+
       - name: Install dependencies
         run: npm install
 
-      - name: Build static Next.js export
+      - name: Build Next.js static export
         run: npm run build
+
+      - name: Verify out folder
+        run: |
+          echo "Generated out directory:"
+          ls -lah out
 
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload static artifact
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: out
+          path: ./out
 
   deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    needs: build
-    runs-on: ubuntu-latest
+
     steps:
-      - name: Deploy to Pages
+      - name: Deploy Pages site
         id: deployment
         uses: actions/deploy-pages@v4
